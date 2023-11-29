@@ -1,6 +1,7 @@
 name: WEB-API CI
 
 on:
+  workflow_dispatch:
   push:
     branches: [ "main" ]
     paths:
@@ -33,4 +34,4 @@ jobs:
         with:
           context: ./web-api
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/playground-app-web-api:${{ github.head_ref == 'main' && 'latest' || github.head_ref}}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/playground-app-web-api:${{ endsWith(github.ref, 'main') && 'latest' || github.head_ref}}
