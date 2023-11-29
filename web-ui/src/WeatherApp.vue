@@ -1,6 +1,6 @@
 <template>
     <div class="container mt-5">
-        <h1 class="mb-4">Weather App</h1>
+        <h1 class="mb-4">Weather App v0.0.1</h1>
         <div class="mb-3">
             <label for="location" class="form-label">Enter Location:</label>
             <input type="text" id="location" v-model="location" class="form-control">
@@ -12,6 +12,7 @@
             <h2>{{ weatherData.city }}, {{ weatherData.country }}</h2>
             <p class="mb-2">Temperature: {{ weatherData.temperature }}°C</p>
             <p class="mb-2">Weather: {{ weatherData.description }}</p>
+            <p class="mb-1">web-api {{ weatherData.webApiVersion }}</p>
         </div>
     </div>
 </template>
