@@ -31,7 +31,6 @@ jobs:
         name: Build and push
         uses: docker/build-push-action@v5
         with:
-          context: .
-          file: ./Dockerfile
+          context: ./web-api
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/playground-app/web-api:${{ env.GITHUB_HEAD_REF == "main" && "latest" || env.GITHUB_HEAD_REF}}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/playground-app-web-api:${{ github.head_ref == 'main' && 'latest' || github.head_ref}}
