@@ -12,7 +12,7 @@
             <h2>{{ weatherData.city }}, {{ weatherData.country }}</h2>
             <p class="mb-2">Temperature: {{ weatherData.temperature }}°C</p>
             <p class="mb-2">Weather: {{ weatherData.description }}</p>
-            <p class="mb-1">web-api {{ weatherData.webApiVersion }}</p>
+            <p class="mb-1">web-api v{{ weatherData.webApiVersion }}</p>
         </div>
     </div>
 </template>
