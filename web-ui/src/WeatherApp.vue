@@ -38,7 +38,7 @@ export default {
             this.loading = true;
             this.error = null;
 
-            const apiUrl = `/api/weather?location=${encodeURIComponent(this.location)}`;
+            const apiUrl = `./api/weather?location=${encodeURIComponent(this.location)}`;
 
             axios.get(apiUrl)
                 .then(response => {
