@@ -10,9 +10,9 @@ FROM build as test
 RUN go test -v ./...
 
 FROM alpine as release
+ENV APP_VER=0.0.1
 WORKDIR /
 COPY --from=build /dist /dist
 RUN adduser -D nonroot
 USER nonroot
-ENV APP_VER=0.0.1
 ENTRYPOINT [ "/dist" ]
