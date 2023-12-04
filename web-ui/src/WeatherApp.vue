@@ -3,7 +3,7 @@
         <h1 class="mb-4">Weather App v0.0.1</h1>
         <div class="mb-3">
             <label for="location" class="form-label">Enter Location:</label>
-            <input type="text" id="location" v-model="location" class="form-control">
+            <input type="text" id="location" v-model="location" class="form-control" @keyup.enter="getWeather">
             <button @click="getWeather" :disable="loading" class="btn btn-primary mt-2">Get Weather</button>
         </div>
         <div v-if="loading" class="alert alert-info">Loading...</div>

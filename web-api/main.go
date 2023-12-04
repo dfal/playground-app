@@ -23,6 +23,7 @@ func main() {
 	}
 
 	http.HandleFunc("/weather", func(w http.ResponseWriter, r *http.Request) {
+		log.Printf("[%s] %s", r.Method, r.URL)
 		getWeather(w, r, openWeatherMapAPIKey)
 	})
 
