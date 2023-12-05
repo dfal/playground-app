@@ -23,6 +23,7 @@ func main() {
 	}
 
 	http.HandleFunc("/weather", func(w http.ResponseWriter, r *http.Request) {
+		log.Printf("[%s] %s", r.Method, r.URL)
 		getWeather(w, r, openWeatherMapAPIKey)
 	})
 
@@ -105,9 +106,24 @@ func getWeather(w http.ResponseWriter, r *http.Request, apiKey string) {
 		return
 	}
 
+	sysInfo, ok := weatherData["sys"].(map[string]interface{})
+	if !ok {
+		http.Error(w, "Error parsing weather data", http.StatusInternalServerError)
+		log.Printf("Error parsing weather data: sys info not found")
+		return
+	}
+
+	country, ok := sysInfo["country"].(string)
+	if !ok {
+		http.Error(w, "Error parsing weather data", http.StatusInternalServerError)
+		log.Printf("Error parsing weather data: country code not found")
+		return
+	}
+
 	caser := cases.Title(language.English)
 	responseData := map[string]interface{}{
 		"city":          city,
+		"country":       country,
 		"temperature":   temperature,
 		"description":   caser.String(description),
 		"webApiVersion": os.Getenv("APP_VER"),
