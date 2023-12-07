@@ -58,3 +58,32 @@ jobs:
           tags: "${{ secrets.DOCKERHUB_USERNAME }}/\
             playground-app-${{ inputs.service_name }}:\
             ${{ steps.main_tag.outputs.tag || steps.feature_tag.outputs.tag }}"
+      -
+        name: Create Git Tag
+        run: |
+          git tag ${{ steps.main_tag.outputs.tag }}
+          git push origin ${{ steps.main_tag.outputs.tag }}
+        if: ${{ steps.main_tag.outputs.tag }}
+      -
+        name: Checkout Deployment Configuration
+        uses: actions/checkout@v4
+        with:
+          repository: dfal/playground-deployment
+          path: deployment
+        if: ${{ steps.main_tag.outputs.tag }}
+      -
+        name: Update Deployment Configuration (Dev)
+        working-directory: deployment
+        run: |
+          sed -i "s/-${{ inputs.service_name }}: .*\"/-${{ inputs.service_name }}:${{ steps.main_tag.outputs.tag }}\"/" ./dev/values.yaml
+        if: ${{ steps.main_tag.outputs.tag }}
+      -
+        name: Commit Deployment Configuration (Dev)
+        working-directory: deployment
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email github-actions@github.com
+          git add .
+          git commit -m "CI generated"
+          git push
+        if: ${{ steps.main_tag.outputs.tag }}
