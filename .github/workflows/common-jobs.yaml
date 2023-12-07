@@ -39,7 +39,7 @@ jobs:
           echo "tag=v${{ steps.version.outputs.version }}" >> $GITHUB_OUTPUT
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
       -
-        name: Set Image Tag (main branch)
+        name: Set Image Tag (feature branch)
         id: feature_tag
         run: >
           echo "tag=${{ github.head_ref || github.ref_name }}-v${{ steps.version.outputs.version }}" >> $GITHUB_OUTPUT
