@@ -68,6 +68,8 @@ jobs:
         run: |
           git tag ${{ steps.main_tag.outputs.tag }}
           git push origin ${{ steps.main_tag.outputs.tag }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.CI_PAT }}
         if: ${{ steps.main_tag.outputs.tag }}
       -
         name: Checkout Deployment Configuration
@@ -75,6 +77,8 @@ jobs:
         with:
           repository: dfal/playground-deployment
           path: deployment
+        env:
+          GITHUB_TOKEN: ${{ secrets.CI_PAT }}
         if: ${{ steps.main_tag.outputs.tag }}
       -
         name: Update Deployment Configuration (Dev)
@@ -89,4 +93,6 @@ jobs:
           git add .
           git commit -m "CI generated"
           git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.CI_PAT }}
         if: ${{ steps.main_tag.outputs.tag }}
