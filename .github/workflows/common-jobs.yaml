@@ -80,9 +80,9 @@ jobs:
       -
         name: Update Deployment Configuration (Dev)
         working-directory: deployment
-        run: >
-          sed -i "s/-${{ inputs.service_name }}: .*\"/-${{ inputs.service_name }}:${{ steps.main_tag.outputs.tag }}\"/"
-          ./environments/dev/values.yaml
+        run: |
+          sed -i "s/-${{ inputs.service_name }}:.*\"/-${{ inputs.service_name }}:${{ steps.main_tag.outputs.tag }}\"/" ./environments/dev/values.yaml
+          cat ./environments/dev/values.yaml
         if: ${{ steps.main_tag.outputs.tag }}
       -
         name: Commit Deployment Configuration (Dev)
