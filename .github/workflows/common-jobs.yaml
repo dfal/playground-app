@@ -27,10 +27,15 @@ jobs:
         name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       -
-        name: Set Version
+        name: Patch Version
+        run: >
+          echo "$(cat ${{ github.workspace }}/${{ inputs.service_name }}/version.txt).${{ github.run_number }}"
+          >> ${{ github.workspace }}/${{ inputs.service_name }}/version.txt
+      -
+        name: Use Version
         id: version
         run: >
-          echo "version=$(cat ${{ github.workspace }}/${{ inputs.service_name }}/version.txt).${{ github.run_number }}"
+          echo "version=$(cat ${{ github.workspace }}/${{ inputs.service_name }}/version.txt)"
           >> $GITHUB_OUTPUT
       -
         name: Set Image Tag (main branch)

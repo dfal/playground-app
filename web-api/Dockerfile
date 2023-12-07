@@ -4,13 +4,12 @@ COPY go.* ./
 RUN go mod download
 
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -o /dist
+RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-X 'main.Version=$(cat version.txt)'" -o /dist
 
 FROM build as test
 RUN go test -v ./...
 
 FROM alpine as release
-ENV APP_VER=0.0.1
 WORKDIR /
 COPY --from=build /dist /dist
 RUN adduser -D nonroot

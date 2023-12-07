@@ -11,6 +11,8 @@ import (
 	"golang.org/x/text/language"
 )
 
+var Version = "0.0.0"
+
 func main() {
 	port := os.Getenv("PORT")
 	if port == "" {
@@ -126,7 +128,7 @@ func getWeather(w http.ResponseWriter, r *http.Request, apiKey string) {
 		"country":       country,
 		"temperature":   temperature,
 		"description":   caser.String(description),
-		"webApiVersion": fmt.Sprintf("%s - bazz-1", os.Getenv("APP_VER")),
+		"webApiVersion": Version,
 	}
 
 	w.Header().Set("Content-Type", "application/json")
