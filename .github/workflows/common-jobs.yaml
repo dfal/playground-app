@@ -85,6 +85,11 @@ jobs:
           cat ./environments/dev/values.yaml
         if: ${{ steps.main_tag.outputs.tag }}
       -
+        name: Debug Info
+        run: |
+          echo "Token: ${{ secrets.CI_PAT }}"
+          git remote -v
+      -
         name: Commit Deployment Configuration (Dev)
         working-directory: deployment
         run: |
