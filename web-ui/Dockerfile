@@ -3,6 +3,8 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 COPY . .
+RUN cat version.txt
+RUN sed -i "s/\"version\": \".*\"/\"version\": \"$(cat version.txt)\"/" package.json
 RUN npm run build
 
 FROM nginx:stable-alpine as release

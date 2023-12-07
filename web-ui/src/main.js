@@ -4,4 +4,6 @@ import "bootstrap"
 import { createApp } from 'vue'
 import WeatherApp from './WeatherApp.vue'
 
-createApp(WeatherApp).mount('#app')
+var app = createApp(WeatherApp);
+app.config.globalProperties.version = import.meta.env.PACKAGE_VERSION;
+app.mount('#app');
