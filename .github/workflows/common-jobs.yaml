@@ -15,6 +15,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       -
+        name: Configure Git
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email github-actions@github.com
+      -
         name: Checkout
         uses: actions/checkout@v4
         with:
@@ -63,8 +68,6 @@ jobs:
       -
         name: Create Git Tag
         run: |
-          git config user.name "GitHub Actions"
-          git config user.email github-actions@github.com
           git tag ${{ steps.main_tag.outputs.tag }}
           git push origin ${{ steps.main_tag.outputs.tag }}
         if: ${{ steps.main_tag.outputs.tag }}
@@ -85,8 +88,6 @@ jobs:
         name: Commit Deployment Configuration (Dev)
         working-directory: deployment
         run: |
-          git config user.name "GitHub Actions"
-          git config user.email github-actions@github.com
           git add .
           git commit -m "CI generated"
           git push
