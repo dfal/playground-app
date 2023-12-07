@@ -42,7 +42,7 @@ jobs:
         name: Set Image Tag (feature branch)
         id: feature_tag
         run: >
-          echo "tag=${{ github.head_ref || github.ref_name }}-v${{ steps.version.outputs.version }}" >> $GITHUB_OUTPUT
+          echo "tag=${{ github.head_ref || github.ref_name }}" >> $GITHUB_OUTPUT
         if: github.ref != 'refs/heads/main' || github.event_name == 'pull_request'
       -
         name: Build and push
