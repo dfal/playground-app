@@ -30,7 +30,7 @@ jobs:
         name: Patch Version
         run: >
           echo "$(cat ${{ github.workspace }}/${{ inputs.service_name }}/version.txt).${{ github.run_number }}"
-          >> ${{ github.workspace }}/${{ inputs.service_name }}/version.txt
+          > ${{ github.workspace }}/${{ inputs.service_name }}/version.txt
       -
         name: Use Version
         id: version
