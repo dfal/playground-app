@@ -33,6 +33,18 @@ jobs:
           echo "version=$(cat ${{ github.workspace }}/${{ inputs.service_name }}/version.txt).${{ github.run_number }}"
           >> $GITHUB_OUTPUT
       -
+        name: Set Image Tag (main branch)
+        id: main_tag
+        run: >
+          echo "tag=v${{ steps.version.outputs.version }}" >> $GITHUB_OUTPUT
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+      -
+        name: Set Image Tag (main branch)
+        id: feature_tag
+        run: >
+          echo "tag=${{ github.head_ref || github.ref_name }}-v${{ steps.version.outputs.version }}" >> $GITHUB_OUTPUT
+        if: github.ref != 'refs/heads/main' || github.event_name == 'pull_request'
+      -
         name: Build and push
         uses: docker/build-push-action@v5
         with:
@@ -40,4 +52,4 @@ jobs:
           push: true
           tags: "${{ secrets.DOCKERHUB_USERNAME }}/\
             playground-app-${{ inputs.service_name }}:\
-            ${{ github.head_ref || github.ref_name }}-v${{ steps.version.outputs.version }}"
+            ${{ steps.main_tag.outputs.tag || steps.feature_tag.outputs.tag }}"
