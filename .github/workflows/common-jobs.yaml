@@ -80,6 +80,8 @@ jobs:
         with:
           repository: dfal/playground-deployment
           path: deployment
+        env:
+          GITHUB_TOKEN: ${{ secrets.API_TOKEN_GITHUB }}
         if: ${{ steps.main_tag.outputs.tag }}
       -
         name: Update Deployment Configuration (Dev)
