@@ -94,7 +94,6 @@ jobs:
         run: |
           git add .
           git commit -m "CI generated"
+          git push --repo "https://dfal:${{ secrets.API_TOKEN_GITHUB }}@github.com/dfal/playground-deployment"
           git push
-        env:
-          GITHUB_TOKEN: ${{ secrets.API_TOKEN_GITHUB }}
         if: ${{ steps.main_tag.outputs.tag }}
