@@ -9,7 +9,7 @@ on:
         required: true
       DOCKERHUB_TOKEN:
         required: true
-      CI_PAT:
+      API_TOKEN_GITHUB:
         required: true
 
 permissions:
@@ -96,5 +96,5 @@ jobs:
           git commit -m "CI generated"
           git push
         env:
-          GITHUB_TOKEN: ${{ secrets.CI_PAT }}
+          GITHUB_TOKEN: ${{ secrets.API_TOKEN_GITHUB }}
         if: ${{ steps.main_tag.outputs.tag }}
