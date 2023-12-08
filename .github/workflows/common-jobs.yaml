@@ -82,6 +82,7 @@ jobs:
         with:
           repository: dfal/playground-deployment
           path: deployment
+          token: ${{ secrets.API_TOKEN_GITHUB }}
         if: ${{ steps.main_tag.outputs.tag }}
       -
         name: Update Deployment Configuration (Dev)
@@ -89,12 +90,6 @@ jobs:
         run: |
           sed -i "s/-${{ inputs.service_name }}:.*\"/-${{ inputs.service_name }}:${{ steps.main_tag.outputs.tag }}\"/" ./environments/dev/values.yaml
           cat ./environments/dev/values.yaml
-        if: ${{ steps.main_tag.outputs.tag }}
-      -
-        name: Commit Deployment Configuration (Dev)
-        working-directory: deployment
-        run: |
-          git add .
-          git commit -m "CI generated"
+          git commit -am "CI generated"
           git push
         if: ${{ steps.main_tag.outputs.tag }}
