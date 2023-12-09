@@ -73,8 +73,10 @@ jobs:
       -
         name: Create Git Tag
         run: |
-          git tag ${{ steps.main_tag.outputs.tag }}
-          git push origin ${{ steps.main_tag.outputs.tag }}
+          git tag ${{env.GIT_TAG}}
+          git push origin ${{ env.GIT_TAG }}
+        env:
+          GIT_TAG: ${{inputs.service_name}}-${{ steps.main_tag.outputs.tag }}
         if: ${{ steps.main_tag.outputs.tag }}
       -
         name: Checkout Deployment Configuration
@@ -87,22 +89,25 @@ jobs:
         name: Update Deployment Configuration (Dev)
         working-directory: deployment
         run: |
-          sed -i "s/-${{ inputs.service_name }}:.*\"/-${{ inputs.service_name }}:${{ steps.main_tag.outputs.tag }}\"/" ./environments/dev/values.yaml
-          cat ./environments/dev/values.yaml
+          sed -i "s/-${{ inputs.service_name }}:.*\"/-${{ inputs.service_name }}:${{ steps.main_tag.outputs.tag }}\"/" ${{ env.DEV_VALUES_PATH }}
+          cat ${{ env.DEV_VALUES_PATH }}
           git commit -am "CI generated"
           git push
+        env:
+          DEV_VALUES_PATH: ./environments/dev/values.yaml
         if: ${{ steps.main_tag.outputs.tag }}
       -
         name: Update Deployment Configuration (Preview)
         working-directory: deployment
         run: |
-          export previewValuesDir=./environments/preview/tmp/${{ github.head_ref || github.ref_name }}-${{ github.event.pull_request.number }}
-          export previewValuesPath=$previewValuesDir/values.yaml
-          mkdir -p $previewValuesDir
-          cp -n ./environments/dev/values.yaml $previewValuesPath
-          sed -i "s/-${{ inputs.service_name }}:.*\"/-${{ inputs.service_name }}:${{ steps.feature_tag.outputs.tag }}\"/" $previewValuesPath
+          mkdir -p $(dirname "${{ env.PREVIEW_VALUES_PATH }}")
+          cp -n ${{ env.DEV_VALUES_PATH }} ${{ env.PREVIEW_VALUES_PATH}}
+          sed -i "s/-${{ inputs.service_name }}:.*\"/-${{ inputs.service_name }}:${{ steps.feature_tag.outputs.tag }}\"/" ${{ env.PREVIEW_VALUES_PATH }}
           cat $previewValuesPath
           git add .
           git commit -m "CI generated"
           git push
+        env:
+          DEV_VALUES_PATH: ./environments/dev/values.yaml
+          PREVIEW_VALUES_PATH: ./environments/preview/tmp/${{ github.head_ref || github.ref_name }}-${{ github.event.pull_request.number }}/values.yaml
         if: ${{ steps.feature_tag.outputs.tag }}
