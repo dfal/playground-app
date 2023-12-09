@@ -59,7 +59,7 @@ jobs:
         name: Set Image Tag (feature branch)
         id: feature_tag
         run: >
-          echo "tag=${{ github.head_ref || github.ref_name }}" >> $GITHUB_OUTPUT
+          echo "tag=${{ github.head_ref || github.ref_name }}-v${{ steps.version.outputs.version }}" >> $GITHUB_OUTPUT
         if: github.ref != 'refs/heads/main' || github.event_name == 'pull_request'
       -
         name: Build and push
@@ -83,7 +83,6 @@ jobs:
           repository: dfal/playground-deployment
           path: deployment
           token: ${{ secrets.API_TOKEN_GITHUB }}
-        if: ${{ steps.main_tag.outputs.tag }}
       -
         name: Update Deployment Configuration (Dev)
         working-directory: deployment
@@ -93,3 +92,17 @@ jobs:
           git commit -am "CI generated"
           git push
         if: ${{ steps.main_tag.outputs.tag }}
+      -
+        name: Update Deployment Configuration (Preview)
+        working-directory: deployment
+        run: |
+          export previewValuesDir=./environments/preview/tmp/${{ github.head_ref || github.ref_name }}-${{ github.event.pull_request.number }}
+          export previewValuesPath=$previewValuesDir/values.yaml
+          mkdir -p $previewValuesDir
+          cp -n ./environments/dev/values.yaml $previewValuesPath
+          sed -i "s/-${{ inputs.service_name }}:.*\"/-${{ inputs.service_name }}:${{ steps.feature_tag.outputs.tag }}\"/" $previewValuesPath
+          cat $previewValuesPath
+          git add .
+          git commit -m "CI generated"
+          git push
+        if: ${{ steps.feature_tag.outputs.tag }}
