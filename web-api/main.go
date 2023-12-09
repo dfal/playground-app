@@ -128,7 +128,7 @@ func getWeather(w http.ResponseWriter, r *http.Request, apiKey string) {
 		"country":       country,
 		"temperature":   temperature,
 		"description":   caser.String(description),
-		"webApiVersion": fmt.Sprintf("%s - zyx feature", Version),
+		"webApiVersion": Version,
 	}
 
 	w.Header().Set("Content-Type", "application/json")
