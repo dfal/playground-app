@@ -1,6 +1,6 @@
 <template>
     <div class="container mt-5">
-        <h1 class="mb-4">Weather App - v{{ version }}</h1>
+        <h1 class="mb-4">Weather App - v{{ version }} TEST2</h1>
         <div class="mb-3">
             <label for="location" class="form-label">Enter Location:</label>
             <input type="text" id="location" v-model="location" class="form-control" @keyup.enter="getWeather">
