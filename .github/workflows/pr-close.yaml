@@ -26,6 +26,7 @@ jobs:
           token: ${{ secrets.API_TOKEN_GITHUB }}
     -
       name: Delete Temp Preview Config
+      working-directory: deployment
       run: |
         rm -r ${{ env.PR_TEMP_PATH }}/${{github.head_ref}}-${{github.event.pull_request.number}}
         git add .
