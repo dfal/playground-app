@@ -12,9 +12,6 @@ on:
       API_TOKEN_GITHUB:
         required: true
 
-permissions:
-  contents: write
-
 jobs:
   build:
     runs-on: ubuntu-latest

@@ -5,7 +5,7 @@ on:
     types: [closed]
 
 env:
-  DEPLOYMENT_CONFIG_REPO: dfal/playground_deployment
+  DEPLOYMENT_CONFIG_REPO: dfal/playground-deployment
   PR_TEMP_PATH: environments/preview/tmp
 
 jobs:
@@ -21,8 +21,8 @@ jobs:
       name: Checkout Deployment Config Repo
       uses: actions/checkout@v4
       with:
-          persist-credentials: true
           repository: ${{ env.DEPLOYMENT_CONFIG_REPO }}
+          path: deployment
           token: ${{ secrets.API_TOKEN_GITHUB }}
     -
       name: Delete Temp Preview Config

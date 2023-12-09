@@ -14,7 +14,6 @@ on:
 jobs:
   call-workflow-passing-data:
     uses: ./.github/workflows/common-jobs.yaml
-    permissions: write-all
     with:
       service_name: web-ui
     secrets:
