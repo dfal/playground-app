@@ -1,0 +1,34 @@
+name: PR Close
+
+on:
+  pull_request:
+    types: [closed]
+
+env:
+  DEPLOYMENT_CONFIG_REPO: dfal/playground_deployment
+  PR_TEMP_PATH: environments/preview/tmp
+
+jobs:
+  clean-up:
+    runs-on: ubuntu-latest
+    steps:
+    -
+      name: Configure Git
+      run: |
+        git config --global user.name "GitHub Actions"
+        git config --global user.email github-actions@github.com
+    -
+      name: Checkout Deployment Config Repo
+      uses: actions/checkout@v4
+      with:
+          persist-credentials: true
+          repository: ${{ env.DEPLOYMENT_CONFIG_REPO }}
+          token: ${{ secrets.API_TOKEN_GITHUB }}
+    -
+      name: Delete Temp Preview Config
+      run: |
+        rm -r ${{ env.PR_TEMP_PATH }}/${{github.head_ref}}-${{github.event.pull_request.number}}
+        git add .
+        git commit -m "CI generated on PR close"
+        git push
+
